@@ -1,7 +1,6 @@
 variable "frontend" {
-    type = map
     default = {
-        Name = "frontend"
+        name = "frontend"
         Terraform = "true"
     }
 }
