@@ -1,6 +1,7 @@
-variable "frontend" {
+variable "common_tags" {
+    type = map
     default = {
-        name = "frontend"
+        Project = "Expense"
         Terraform = "true"
     }
 }
