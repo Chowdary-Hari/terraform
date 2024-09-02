@@ -1,7 +1,8 @@
 dev:
 	rm -rf .terraform
 	terraform init -backend-config=env-dev/state.tfvars
-	terraform apply -auto-approve -var-file=env-dev/inputs.tfvars
+#	terraform apply -auto-approve -var-file=env-dev/inputs.tfvars
+	terraform plan -var-file=env-dev/inputs.tfvars
 
 
 dev-destroy:
