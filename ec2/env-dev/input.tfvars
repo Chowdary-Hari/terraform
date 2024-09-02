@@ -1,4 +1,5 @@
 common_tags = {
-  Project = "Expense"
+  Project   = "Expense"
   Terraform = "true"
 }
+
