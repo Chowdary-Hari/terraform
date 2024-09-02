@@ -7,10 +7,10 @@ resource "aws_instance" "frontend" {
 
 }
 
-# output "ami_id" {
-#   value = data.aws_ami.ami.id
-# }
-#
-# output "security_group_name" {
-#   value = data.aws_security_group.sg.id
-# }
+output "ami_id" {
+  value = data.aws_ami.ami.id
+}
+
+output "security_group_name" {
+  value = data.aws_security_group.sg.id
+}
