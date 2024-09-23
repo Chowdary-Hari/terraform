@@ -64,9 +64,9 @@ module "db" {
 }
 
 module "record" {
-  source = "../../moduels/05.dns"
+  source = "../../moduels/03.dns"
   zone_id = data.cloudflare_zone.zone.id
-  component = "mysql"
+  component = "db"
   dns_record = module.db.db_instance_address
   record_type = "CNAME"
 }
