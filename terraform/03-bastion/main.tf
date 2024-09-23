@@ -1,35 +1,45 @@
-resource "aws_instance" "frontend" {
-  ami           = data.aws_ami.ami_info.id
-  instance_type = var.instance_type
-  subnet_id     = element(split(",",data.aws_ssm_parameter.public_subnet_id.value),0)
+module "bastion" {
+  source  = "terraform-aws-modules/ec2-instance/aws"
+
+  name               = "${var.env}-${var.component}"
+  ami                = data.aws_ami.ami_info.id
+  instance_type      = var.instance_type
+  subnet_id          = element(split(",", data.aws_ssm_parameter.public_subnet_id.value), 0)
   vpc_security_group_ids = [data.aws_ssm_parameter.bastion_sg_id.value]
 
-  instance_market_options {
-    market_type = "spot"
-    spot_options {
-      max_price                      = "0"  # Set to 0 for the lowest price, meaning use the current spot price.
-      instance_interruption_behavior = "stop"
-      spot_instance_type             = "persistent"
+#   # Provide the user_data script
+#   user_data = file("${path.module}/userdata.sh")
+
+  tags = merge(
+    var.common_tags,
+    {
+      Name = "${var.env}-${var.component}"
     }
-  }
-
-  user_data = base64encode(templatefile("${path.module}/userdata.sh", {
-    component = var.component
-  }))
-
-
-  tags = {
-    Name = "${var.env}-${var.component}"
-  }
+  )
 }
 
-
-resource "cloudflare_record" "backend" {
+resource "cloudflare_record" "bastion" {
   zone_id = data.cloudflare_zone.zone.id
   name    = var.component
-  content = aws_instance.frontend.private_ip
+  content = module.bastion.private_ip  # Use the private IP from the EC2 instance module
   type    = "A"
   ttl     = 60
   proxied = false
   allow_overwrite = true
+
+  # Lifecycle rules to create before destroying the old one
+  lifecycle {
+    create_before_destroy = true
+  }
 }
+
+# resource "cloudflare_record" "bastion" {
+#   zone_id = data.cloudflare_zone.zone.id
+#   name    = var.component
+#   content = module.bastion.private_ip  # Use the private IP from the EC2 instance module
+#   type    = "A"
+#   ttl     = 60
+#   proxied = false
+#   allow_overwrite = true
+# }
+
