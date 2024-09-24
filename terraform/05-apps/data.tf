@@ -33,7 +33,7 @@ data "aws_ssm_parameter" "ansible_sg_id" {
 }
 
 data "aws_ssm_parameter" "public_subnet_id" {
-  name = "/${var.project}/${var.env}/private_subnet_id"
+  name = "/${var.project}/${var.env}/public_subnet_id"
 }
 
 

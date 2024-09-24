@@ -24,4 +24,16 @@ resource "cloudflare_record" "backend" {
   }
 }
 
+# resource "cloudflare_record" "ansible" {
+#   zone_id = data.cloudflare_zone.zone.id
+#   name    = "ansible"
+#   content = module.ansible.public_ip
+#   type    = "A"
+#   ttl     = 60
+#   proxied = false
+#
+#   lifecycle {
+#     create_before_destroy = true
+#   }
+# }
 

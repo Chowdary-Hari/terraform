@@ -98,3 +98,21 @@ This way, `element(split(",", ...))` is effectively used to retrieve specific su
 - **`join()`** combines list elements into a single string.
 - **`split()`** splits a string into a list.
 - **`element()`** extracts an item from a list by index.
+
+
+
+##### if apply
+```shell
+for i in 1-vpc/ 02-sg/ 03-bastion/ 04.rds/ 05-apps/ ; do cd $i ; make apply ; cd .. ; done
+```
+```shell
+for i in $(ls -d */ ) ; do echo ${i} ; cd ${i} ; make apply ; cd .. ; done
+```
+
+##### if destroy
+```shell
+for i in 05-apps/ 04.rds/ 03-bastion/ 02-sg/ 01-vpc/ ; do cd $i ; make destroy ; cd .. ; done
+```
+```shell
+for i in $(ls -dr */ ) ; do echo ${i} ; cd ${i} ; make destroy ; cd .. ; done
+```
