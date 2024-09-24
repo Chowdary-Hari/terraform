@@ -63,10 +63,24 @@ module "db" {
 
 }
 
-module "record" {
-  source = "../../moduels/03.dns"
+# module "record" {
+#   source = "../../moduels/03.dns"
+#   zone_id = data.cloudflare_zone.zone.id
+#   component = "db"
+#   dns_record = module.db.db_instance_address
+#   record_type = "CNAME"
+# }
+resource "cloudflare_record" "db" {
   zone_id = data.cloudflare_zone.zone.id
-  component = "db"
-  dns_record = module.db.db_instance_address
-  record_type = "CNAME"
+  name    = "db"
+  content = module.db.db_instance_address
+  type    = "CNAME"
+  ttl     = 60
+  proxied = false
+#   allow_overwrite = true
+
+  # Lifecycle rules to create before destroying the old one
+  lifecycle {
+    create_before_destroy = true
+  }
 }
